@@ -20,7 +20,7 @@ MoranRollupPlugin(require('./moran.config'),{
 }),
 ```
 
-## What to develop your own module??
+## Want to develop your own module??
 It's simple! All you need is to define a schema and resolver for your data!
 
 ```javascript
