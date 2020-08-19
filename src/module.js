@@ -23,4 +23,4 @@ class MoranModule {
           }
     }
 }
-exports.MoranModule = MoranModule
+exports = MoranModule
