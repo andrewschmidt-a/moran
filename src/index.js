@@ -1,4 +1,5 @@
 var rollup = require("./rollup-plugin")
 
-exports.MoranRollupPlugin = rollup
-exports.MoranModule = require('./module')
+module.exports.MoranRollupPlugin = rollup
+module.exports.MoranModule = require('./module')
+module.exports.TestDataModule = require('./testData.module')

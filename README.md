@@ -1,15 +1,14 @@
 # Moran
-Simple Data Layer for the JS Developer
+Simple Data Layer for the JS Developer. Inspired by Svelte and Gatsby
 
 ## Getting Started
 ### Rollup
 To define your modules for Moran simply create a moran.config.js file like this:
 ```javascript
-var {TestDataModule, TestDataModule2} = require('moran')
+var {TestDataModule} = require('moran')
 
 exports.modules = {
-    "testData": TestDataModule2.TestDataModule(),
-    "testData2": TestDataModule2.TestDataModule()
+    "testData": new TestDataModule()
 }
 ```
 
@@ -19,41 +18,65 @@ MoranRollupPlugin(require('./moran.config'),{
     exclude: "node_modules/**"
 }),
 ```
+### Webpack
+Not yet implemented, stay tune!
+
+### Parcel
+Not yet implemented, stay tume!
+
+## Using Moran
+Then to use it in your project all you need to do is add a graphql query where you want a data object to exist
+```javascript
+	_: data = `{
+                 testData {
+                    hello
+                 }
+               }`
+```
+Note the _ label is before your data variable name. This is critical as the moran plugin looks for this _ to make a call to your data sources to populate that variable.
+
 
 ## Want to develop your own module??
-It's simple! All you need is to define a schema and resolver for your data!
+It's simple! All you need is to define a schema and resolver for your data and pass it into the parent class 'MoranModule'!
 
 ```javascript
-var { MoranModule } = require('moran')
+var MoranModule = require('./module')
 
-let schema = `
-    type TestObject2{
-        test: String
-    }
-    type TestObject {
-        test: TestObject2
-    }
-    type root {
-        hello: String,
-        testObject: TestObject
-    }
-`;
+class TestDataModule extends MoranModule {
+    constructor(options) {
+        if(options && options.paths){
 
-let resolver = {
-    hello: () => {
-      return 'Hello world!';
-    },
-    testObject: () => {
-        return {
-          test: {
-              test: "test"
-          }
         }
+        let schema = `
+            type TestObject2{
+                test: String
+            }
+            type TestObject {
+                test: TestObject2
+            }
+            type root {
+                hello: String,
+                testObject: TestObject
+            }
+        `;
+
+        let resolver = {
+            hello: () => {
+                return 'Hello world!';
+            },
+            testObject: () => {
+                return {
+                    test: {
+                        test: "test"
+                    }
+                }
+            }
+        };
+        super(schema, resolver);
     }
-  };
-exports.TestDataModule = function(){
-    return new MoranModule(schema, resolver);
 }
+
+module.exports = TestDataModule
 ```
 
 ### schema
