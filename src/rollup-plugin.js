@@ -1,13 +1,10 @@
 const fs = require("fs")
-var { graphql,buildSchema, GraphQLObjectType, GraphQLString, GraphQLSchema} = require('graphql');
+const Moran = require("./moran")
 
 module.exports = function(moranConfig, options) {
-    let fields =  Object.assign({}, ...Object.keys(moranConfig.modules).map(k => ({[k]: moranConfig.modules[k].graphQLConfig(k)})));
+    let moran = new Moran(moranConfig)
 
-    var rootQueryType = new GraphQLObjectType({
-        name: 'Query',
-        fields: fields
-    });
+
     return {
       name: 'moran',
       load() {
@@ -23,10 +20,10 @@ module.exports = function(moranConfig, options) {
         matches.forEach(match => {
             if(match){
                 queries.push(new Promise(function(resolve, reject){
-                  graphql(new GraphQLSchema({query: rootQueryType}), match[3].trim()).then(data => {
-                    //   console.log(data)
-                      resolve([data.data, match])
-                  })
+                    moran.query(match[3].trim()).then(function(result){
+                        console.log(result)
+                        return [result.data, match]
+                    })
                 }))
             }
         })
