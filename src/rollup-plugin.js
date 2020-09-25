@@ -22,7 +22,7 @@ module.exports = function(moranConfig, options) {
                 queries.push(new Promise(function(resolve, reject){
                     moran.query(match[3].trim()).then(function(result){
                         console.log(result)
-                        return [result.data, match]
+                        resolve([result.data, match])
                     })
                 }))
             }
